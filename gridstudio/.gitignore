@@ -1,0 +1,13 @@
+node_modules/
+userdata/workspace*
+debug
+manager.exe
+cpu.dat
+main.exe
+main
+profile-info/
+manager
+.vscode/
+.DS_Store
+.cache/
+__pycache__/
