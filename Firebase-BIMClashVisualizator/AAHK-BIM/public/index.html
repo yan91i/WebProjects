@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <meta name="Clash Chart" content="width=device-width, initial-scale=1">
+  <title>Airport Authority - Capital Works Department</title>
+
+  <!-- Local Reference -->
+  <script src="js/JQuery.js" type="text/javascript" charset="utf-8"></script>
+  <script src="js/papaparse.js" type="text/javascript" charset="utf-8"></script>
+  <script src="js/main.js" type="text/javascript" charset="utf-8"></script>
+
+  <!-- Echart Reference -->
+  <script src="https://cdn.staticfile.org/echarts/4.7.0/echarts.min.js"></script>
+
+  <!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
+  <script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-auth.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-firestore.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/7.14.0/firebase-database.js"></script>
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+  <!-- Optional JavaScript -->
+  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+  <!--<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>-->
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+    integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+    integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+    crossorigin="anonymous"></script>
+
+
+
+
+</head>
+
+<body onload="initApp()">
+  <div id="header" style="width:screenwidth">
+    <div class="container">
+      <div class="row clearfix">
+        <div class="col-md-5 column">
+        </div>
+        <div class="col-md-2 column">
+          <img src="https://www.hongkongairport.com/iwov-resources/image/common/logo.png" alt="AA logo"
+            style="width:150px;height:75px" ;></Img>
+        </div>
+        <div class="col-md-5 column">
+        </div>
+      </div>
+    </div>
+    <div id="header">
+      <h5 style="margin-bottom:0;text-align:center;">Airport Authority Capital Works Department</h5>
+    </div>
+    <div id="footer" style="background-color:#FFA500;clear:both;text-align:center;">
+      <p>Copyright © https://www.hongkongairport.com/</p>
+    </div>
+  </div>
+
+  <div id="login" class="container" style="display:block">
+    <div class="row clearfix">
+      <div class="col-md-4 column">
+      </div>
+      <div class="col-md-4 column">
+        <form>
+          <div class="form-group">
+            <label for="email">Email:</label>
+            <input type="email" class="form-control" id="email" placeholder="Enter email">
+          </div>
+          <div class="form-group">
+            <label for="pwd">Password:</label>
+            <input type="password" class="form-control" id="password" placeholder="Enter password">
+          </div>
+          <div class="form-check">
+            <label class="form-check-label">
+              <input class="form-check-input" type="checkbox"> Remember me
+            </label>
+          </div>
+          <button onclick="toggleSignIn()" id="quickstart-sign-in" type="button" class="btn btn-primary">Sign
+            In</button>
+          <button onclick="sendPasswordReset()" id="quickstart-password-reset" type="button" class="btn btn-info">Reset
+            Password by Email</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <div id="projectList">
+  </div>
+
+  <div id="pSummary">
+  </div>
+
+  <div id="setup">
+  </div>
+
+  <div id="newReport">
+  </div>
+
+
+  <script>
+    // Your web app's Firebase configuration
+    var firebaseConfig = {
+      apiKey: "AIzaSyDTIP08zCfBqDXMSA8EcOhjW6qmqb-D-3A",
+      authDomain: "echart-aahk.firebaseapp.com",
+      databaseURL: "https://echart-aahk.firebaseio.com",
+      projectId: "echart-aahk",
+      storageBucket: "echart-aahk.appspot.com",
+      messagingSenderId: "449836951602",
+      appId: "1:449836951602:web:ee72f1a4a1ece6e3dd342b",
+      measurementId: "G-7JTPSYNRGG"
+    };
+    // Initialize Firebase
+    firebase.initializeApp(firebaseConfig);
+    firebase.analytics();
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Document Circulation Tracking System Login</title>
+
+    <!-- Material Design Theming - mdl -->
+    <link rel="stylesheet" href="https://code.getmdl.io/1.1.3/material.orange-indigo.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <script defer src="https://code.getmdl.io/1.1.3/material.min.js"></script>
+
+    <!--Call Bootstrap-->
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    
+    <script src="https://cdn.firebase.com/libs/firebaseui/4.1.0/firebaseui.js"></script>
+    <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/4.1.0/firebaseui.css" />
+    
+    <script type="text/javascript" src="qrcode.js"></script>
+    <script type="text/javascript" src='main.js'></script>
+  </head>
+  <body onload="initApp()">
+
+    <!-- Header -->
+    <div id="header" style="width:screenwidth">
+       <div class="container">
+        <div class="row clearfix">
+          <div class="col-md-5 column">
+          </div>
+          <div class="col-md-2 column">
+              <img src="https://www.hongkongairport.com/iwov-resources/image/common/logo.png" alt="AA logo" style="width:200px;height:100px";></Img>
+          </div>
+          <div class="col-md-5 column">
+          </div>
+        </div>
+      </div>
+      <div id="header" >
+        <h3 style="margin-bottom:0;text-align:center;">Airport Authority Capital Works Department</h3>
+      </div>
+          
+      <div id="name" >
+        <h1 style="margin-bottom:0;text-align:center;">Documents Circulation Tracking System</h1>
+      </div>
+
+      <div id="footer" style="background-color:#FFA500;clear:both;text-align:center;">
+        Copyright © https://www.hongkongairport.com/
+      </div>
+         
+    </div>
+    
+    <div id="login-div" class="container" style="display:block">
+      <h2>Log-in Page</h2>
+      <form>
+        <div class="form-group">
+          <label for="email">Email:</label>
+          <input type="email" class="form-control" id="email" placeholder="Enter email">
+        </div>
+        <div class="form-group">
+          <label for="pwd">Password:</label>
+          <input type="password" class="form-control" id="password" placeholder="Enter password">
+        </div>
+        <div class="form-check">
+          <label class="form-check-label">
+            <input class="form-check-input" type="checkbox"> Remember me
+          </label>
+        </div>
+        <button onclick="toggleSignIn()" id="quickstart-sign-in" type="button" class="btn btn-primary">Sign In</button>
+        <button onclick="handleSignUp()" type="button" class="btn btn-secondary" >Sign Up</button>
+        <button onclick="sendEmailVerification()" id="quickstart-verify-email" type="button" class="btn btn-success">Verify Your Email</button>
+        <button onclick="sendPasswordReset()" id="quickstart-password-reset" type="button" class="btn btn-info">Send Password Reset Email</button>
+        <button onclick="signOut()" id="sign-out" type="button" class="btn btn-danger">Sign Out</button>
+        <div class="quickstart-user-details-container">
+          Sign-in status: <span id="quickstart-sign-in-status">Unknown</span>
+          <div>Firebase auth <code>currentUser</code> object value:</div>
+          <pre><code id="quickstart-account-details">null</code></pre>
+        </div>
+      </form>
+    </div>
+    
+    <div id="logged-div" class="container" style="display:block">
+      <div class="container">
+        <div class="row clearfix">
+          <div class="col-md-5 column">
+            <div>
+              <h1 id="welcome">Welcome, Gavin!</h1>
+            </div>
+            <div class="input-group mb-3">
+              <input type="text" class="form-control" id="newName" placeholder="Enter your new user name">
+              <div class="input-group-append">
+                <button onclick="changeDisplayName()" class="btn btn-success" type="submit">Change Name</button>
+                <button class="btn btn-danger" onclick="signOut()" id="signOut" type="submit">Sign Out</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="container">
+        <div class="row clearfix">
+          <div class="col-md-6 column">
+            <br>
+            <h3>Current Circulation Task List:</h3>
+            <br>
+          </div>
+          <div class="col-md-2 column">
+          </div>
+          <div class="col-md-4 column">
+            <br>
+            <button onclick="toCreate()" id="toCreate" type="submit" class="btn btn-primary btn-sm btn-block">New Circulation</button>
+            <p></p>
+            <div class="input-group mb-3">
+              <input type="text" class="form-control" id="searchSheet" placeholder="Input a CRF No. for search" onkeydown="isKeyPressed(event)">
+              <div class="input-group-append">
+              <button onclick="searchTask()" type="button" class="btn btn-primary">Search</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="container">
+        <div class="row clearfix">
+          <div class="col-md-12 column">
+            <table class="table table-bordered table-hover table-condensed">
+              <thead>
+                <tr>
+                  <th>CRF No.</th>
+                  <th>Creator</th>
+                  <th>Project Number</th>
+                  <th>Document Name</th>
+                  <th>Last Update</th>
+                </tr>
+              </thead>
+              <tbody id="taskCurrentList">
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+      <div class="container">
+        <div class="row clearfix">
+          <div class="col-md-6 column">
+            <br>
+            <br>
+            <h3>Completed Circulation Task List:</h3>
+            <br>
+          </div>
+        </div>
+      </div>
+      <div class="container">
+          <div class="row clearfix">
+            <div class="col-md-12 column">
+              <table class="table table-bordered table-hover table-condensed">
+                <thead>
+                  <tr>
+                    <th>CRF No.</th>
+                    <th>Creator</th>
+                    <th>Project Number</th>
+                    <th>Document Name</th>
+                    <th>Last Update</th>
+                  </tr>
+                </thead>
+                <tbody id="taskCompleteList">
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+    </div>
+
+    <div id="task-div" class="container" style="display:block">
+      <div class="container">
+        <div class="row clearfix">
+          <div id="sheetHead" class="col-md-6 column">
+            <h5>Sheet Num</h5>
+            <h5>Sheet Creator</h5>
+            <h5>Sheet Contract Number</h5>
+            <h5>Sheet Documnet Name</h5>
+          </div>
+          <div class="col-md-2 column">
+              <br>
+              <button onclick="toLogged()" type="submit" class="btn btn-secondary btn-sm btn-block">Back to List</button>
+              <br>
+              <button onclick="deleteTask()" type="submit" class="btn btn-outline-danger btn-sm btn-block">Delete This Task</button>
+          </div>
+          <div class="col-md-2 column">
+            <br>
+            <button onclick="toModify()" type="submit" class="btn btn-primary btn-sm btn-block">Modify</button>
+            <br>
+            <button onclick="markCompleted()" type="button" class="btn btn-success btn-sm btn-block">Mark as Completed</button>
+          </div>
+          <div class="col-md-2 column">
+            <br>
+            <button onclick="toPrint()" type="submit" class="btn btn-primary btn-sm btn-block">Print Cover</button>
+            <br>
+            <button onclick="copy()" type="submit" class="btn btn-primary btn-sm btn-block">Copy Task</button>
+          </div>
+          <div class="container">
+            <table class="table table-bordered table-hover">
+              <thead>
+                <tr>
+                  <th>No.</th>
+                  <th>Name</th>
+                  <th>IN Record</th>
+                  <th>OUT Record</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>1</td>
+                  <td id="u1Name"></td>
+                  <td id="u1InRecord"></td>
+                  <td id="u1OutRecord"></td>
+                </tr>
+                <tr>
+                  <td>2</td>
+                  <td id="u2Name"></td>
+                  <td id="u2InRecord"></td>
+                  <td id="u2OutRecord"></td>
+                </tr>
+                <tr>
+                  <td>3</td>
+                  <td id="u3Name"></td>
+                  <td id="u3InRecord"></td>
+                  <td id="u3OutRecord"></td>
+                </tr>
+                <tr>
+                  <td>4</td>
+                  <td id="u4Name"></td>
+                  <td id="u4InRecord"></td>
+                  <td id="u4OutRecord"></td>
+                </tr>
+                <tr>
+                  <td>5</td>
+                  <td id="u5Name"></td>
+                  <td id="u5InRecord"></td>
+                  <td id="u5OutRecord"></td>
+                </tr>
+                <tr>
+                  <td>6</td>
+                  <td id="u6Name"></td>
+                  <td id="u6InRecord"></td>
+                  <td id="u6OutRecord"></td>
+                </tr>
+                <tr>
+                  <td>7</td>
+                  <td id="u7Name"></td>
+                  <td id="u7InRecord"></td>
+                  <td id="u7OutRecord"></td>
+                </tr>
+                <tr>
+                  <td>8</td>
+                  <td id="u8Name"></td>
+                  <td id="u8InRecord"></td>
+                  <td id="u8OutRecord"></td>
+                </tr>
+                <tr>
+                  <td>9</td>
+                  <td id="u9Name"></td>
+                  <td id="u9InRecord"></td>
+                  <td id="u9OutRecord"></td>
+                </tr>
+                <tr>
+                  <td>10</td>
+                  <td id="u10Name"></td>
+                  <td id="u10InRecord"></td>
+                  <td id="u10OutRecord"></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>         
+        </div>
+      </div>
+    </div>
+
+    <div id="create-div" class="container mt-3" style="display:block">
+      <h1>Create New Circulation Sheet</h1> 
+      <div class="container">
+        <div class="row clearfix">
+          <div class="col-md-8 column">
+          </div>
+          <div class="col-md-2 column">
+            <button onclick="toLogged()" type="submit" class="btn btn-secondary">Back to List</button>
+          </div>
+        </div>
+      </div>
+      <br>
+      <div class="container">
+          <div class="row clearfix">
+            <div class="col-md-8 column">
+              <div class="form-group">
+                <label>CRF No.:</label>
+                <br>
+                <input id="cirNum" type="text" placeholder="Enter circulation number" style="width:80%" onfocusout="checkCRF()" /><br />
+                <br>
+                <label>Project Number:</label>
+                <br>
+                <input id="projectNum" type="text" placeholder="Enter contract number" style="width:80%" /><br />
+                <br>
+                <label>Project Name:</label>
+                <br>
+                <input id="projectName" type="text" placeholder="Enter project name" style="width:80%" /><br />
+                <br>
+                <label>Document Name:</label>
+                <br>
+                <input id="docName" type="text" placeholder="Enter document name" style="width:80%" /><br />
+                <br>
+              </div>
+            </div>
+            <div class="col-md-4 column">
+              <h>QR Code：</h>
+              <div id="qrcode" style="width:100px; height:100px; margin-top:15px;"></div>
+            </div>
+          </div>
+      </div>
+      <h5>Input the circulation name list to create the sheet</h5>
+      <form>
+        <div class="input-group mb-3 input-group-sm">
+          <div class="input-group-prepend">
+            <span class="input-group-text">1.</span>
+          </div>
+          <input type="text" class="form-control" placeholder="Name" id="name1">
+          <input type="text" class="form-control" placeholder="Title" id="tit1">
+        </div>
+      </form>
+      <form>
+        <div class="input-group mb-3 input-group-sm">
+          <div class="input-group-prepend">
+            <span class="input-group-text">2.</span>
+          </div>
+          <input type="text" class="form-control" placeholder="Name" id="name2">
+          <input type="text" class="form-control" placeholder="Title" id="tit2">
+        </div>
+      </form>
+      <form>
+        <div class="input-group mb-3 input-group-sm">
+          <div class="input-group-prepend">
+            <span class="input-group-text">3.</span>
+          </div>
+          <input type="text" class="form-control" placeholder="Name" id="name3">
+          <input type="text" class="form-control" placeholder="Title" id="tit3">
+        </div>
+      </form>
+      <form>
+        <div class="input-group mb-3 input-group-sm">
+          <div class="input-group-prepend">
+            <span class="input-group-text">4.</span>
+          </div>
+          <input type="text" class="form-control" placeholder="Name" id="name4">
+          <input type="text" class="form-control" placeholder="Title" id="tit4">
+        </div>
+      </form>
+      <form>
+        <div class="input-group mb-3 input-group-sm">
+          <div class="input-group-prepend">
+            <span class="input-group-text">5.</span>
+          </div>
+          <input type="text" class="form-control" placeholder="Name" id="name5">
+          <input type="text" class="form-control" placeholder="Title" id="tit5">
+        </div>
+      </form>
+      <form>
+        <div class="input-group mb-3 input-group-sm">
+          <div class="input-group-prepend">
+            <span class="input-group-text">6.</span>
+          </div>
+          <input type="text" class="form-control" placeholder="Name" id="name6">
+          <input type="text" class="form-control" placeholder="Title" id="tit6">
+        </div>
+      </form>
+      <form>
+        <div class="input-group mb-3 input-group-sm">
+          <div class="input-group-prepend">
+            <span class="input-group-text">7.</span>
+          </div>
+          <input type="text" class="form-control" placeholder="Name" id="name7">
+          <input type="text" class="form-control" placeholder="Title" id="tit7">
+        </div>
+      </form>
+      <form>
+          <div class="input-group mb-3 input-group-sm">
+            <div class="input-group-prepend">
+              <span class="input-group-text">8.</span>
+            </div>
+            <input type="text" class="form-control" placeholder="Name" id="name8">
+          <input type="text" class="form-control" placeholder="Title" id="tit8">
+          </div>
+        </form>
+        <form>
+        <div class="input-group mb-3 input-group-sm">
+          <div class="input-group-prepend">
+            <span class="input-group-text">9.</span>
+          </div>
+          <input type="text" class="form-control" placeholder="Name" id="name9">
+          <input type="text" class="form-control" placeholder="Title" id="tit9">
+        </div>
+      </form>
+      <form>
+        <div class="input-group mb-3 input-group-sm">
+          <div class="input-group-prepend">
+            <span class="input-group-text">10.</span>
+          </div>
+          <input type="text" class="form-control" placeholder="Name" id="name10">
+          <input type="text" class="form-control" placeholder="Title" id="tit10">
+        </div>
+      </form>
+      <!--提交表单-->
+      <div>
+        <button onclick="submitList()" id="submitList" type="submit" class="btn btn-primary">SUBMIT</button>
+      </div>
+    </div>
+
+    <div id="print-div" style="display:block">
+      <div class="container">
+        <br>
+        <br>
+        <h5 class ="text-center">HONG KONG INTERNATIONAL AIRPORT</h5>
+        <h5 class ="text-center" id="printConNum">CONTRACT NO.</h5>
+        <h5 class ="text-center" id="printProjectName">Project Name</h5>
+        <br>
+        <div class="row clearfix">
+          <div class="col-md-4 column">
+            <br>
+            <br>
+            <br>
+            <br>
+            <br>
+            <p class="uppercase" id="printDocName">Document Name</p>
+          </div>
+          <div class="col-md-4 column">
+            <br>
+            <h5 class="text-center uppercase" id="printNum">Circulation number</h5>
+            <h5 class="text-center uppercase" id="printTime">Circulation Time</h5>
+            <br>
+            <h5 class ="text-center">Sign-Off Sheet</h5>
+          </div>
+          <div class="col-md-2 column">
+          </div>
+          <div class="col-md-2 column">
+            <h>QR Code：</h>
+            <div id="print-qrcode" style="width:100px; height:100px; margin-top:15px;"></div>
+            <br>
+            <p6 id="Addr"></p6>
+          </div>
+        </div>
+        <br>
+        <table class="table table-bordered">
+          <thead class="thead-light">
+            <tr>
+              <th width="10">No.</th>
+              <th width="200">Name</th>
+              <th width="100">Title</th>
+              <th>Signature/Date</th>
+              <th>Comment</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr height="80">
+              <td>1</td>
+              <td id="printName1"></td>
+              <td id="printTit1"></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr height="80">
+              <td>2</td>
+              <td id="printName2"></td>
+              <td id="printTit2"></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr height="80">
+              <td>3</td>
+              <td id="printName3"></td>
+              <td id="printTit3"></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr height="80">
+              <td>4</td>
+              <td id="printName4"></td>
+              <td id="printTit4"></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr height="80">
+              <td>5</td>
+              <td id="printName5"></td>
+              <td id="printTit5"></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr height="80">
+              <td>6</td>
+              <td id="printName6"></td>
+              <td id="printTit6"></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr height="80">
+              <td>7</td>
+              <td id="printName7"></td>
+              <td id="printTit7"></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr height="80">
+              <td>8</td>
+              <td id="printName8"></td>
+              <td id="printTit8"></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr height="80">
+              <td>9</td>
+              <td id="printName9"></td>
+              <td id="printTit9"></td>
+              <td></td>
+              <td></td>
+            </tr>
+            <tr height="80">
+              <td>10</td>
+              <td id="printName10"></td>
+              <td id="printTit10"></td>
+              <td></td>
+              <td></td>
+            </tr>
+          </tbody>
+        </table>
+        <div id="ps">
+          <p></p>
+        </div>
+      </div>
+      <div class="container">
+          <div class="row clearfix">
+            <div class="col-md-4 column">
+            </div>
+            <div class="col-md-4 column">
+              <button onclick="print()" type="submit" class="btn btn-primary">Print</button>
+              <button onclick="toLogged()" type="submit" class="btn btn-primary">Back to List</button>
+            </div>
+            <div class="col-md-4 column">
+            </div>
+          </div>
+      </div>
+    </div>
+
+    <div id="modify-div" class="container mt-3" style="display:block">
+      <h1>Modify Circulation Sheet</h1> 
+      <div class="container">
+        <div class="row clearfix">
+          <div class="col-md-8 column">
+          </div>
+          <div class="col-md-2 column">
+            <button onclick="toLogged()" type="submit" class="btn btn-secondary">Back to List</button>
+          </div>
+        </div>
+      </div>
+      <br>
+      <div class="container">
+          <div class="row clearfix">
+            <div class="col-md-8 column">
+              <div class="form-group">
+                <label>CRF No.:</label>
+                <br>
+                <input id="modiCirNum" type="text" placeholder="Enter circulation number" style="width:80%" onfocusout="checkCRF()" /><br />
+                <br>
+                <label>Project Number:</label>
+                <br>
+                <input id="modiProjectNum" type="text" placeholder="Enter contract number" style="width:80%" /><br />
+                <br>
+                <label>Project Name:</label>
+                <br>
+                <input id="modiProjectName" type="text" placeholder="Enter project name" style="width:80%" /><br />
+                <br>
+                <label>Document Name:</label>
+                <br>
+                <input id="modiDocName" type="text" placeholder="Enter document name" style="width:80%" /><br />
+                <br>
+              </div>
+            </div>
+            <div class="col-md-4 column">
+              <h>QR Code：</h>
+              <div id="modi-qrcode" style="width:100px; height:100px; margin-top:15px;"></div>
+            </div>
+          </div>
+      </div>
+      <h5>Modify the circulation name list to revise the sheet</h5>
+      <form>
+        <div class="input-group mb-3 input-group-sm">
+          <div class="input-group-prepend">
+            <span class="input-group-text">1.</span>
+          </div>
+          <input type="text" class="form-control" placeholder="Name" id="modiName1">
+          <input type="text" class="form-control" placeholder="Title" id="modiTit1">
+        </div>
+      </form>
+      <form>
+        <div class="input-group mb-3 input-group-sm">
+          <div class="input-group-prepend">
+            <span class="input-group-text">2.</span>
+          </div>
+          <input type="text" class="form-control" placeholder="Name" id="modiName2">
+          <input type="text" class="form-control" placeholder="Title" id="modiTit2">
+        </div>
+      </form>
+      <form>
+        <div class="input-group mb-3 input-group-sm">
+          <div class="input-group-prepend">
+            <span class="input-group-text">3.</span>
+          </div>
+          <input type="text" class="form-control" placeholder="Name" id="modiName3">
+          <input type="text" class="form-control" placeholder="Title" id="modiTit3">
+        </div>
+      </form>
+      <form>
+        <div class="input-group mb-3 input-group-sm">
+          <div class="input-group-prepend">
+            <span class="input-group-text">4.</span>
+          </div>
+          <input type="text" class="form-control" placeholder="Name" id="modiName4">
+          <input type="text" class="form-control" placeholder="Title" id="modiTit4">
+        </div>
+      </form>
+      <form>
+        <div class="input-group mb-3 input-group-sm">
+          <div class="input-group-prepend">
+            <span class="input-group-text">5.</span>
+          </div>
+          <input type="text" class="form-control" placeholder="Name" id="modiName5">
+          <input type="text" class="form-control" placeholder="Title" id="modiTit5">
+        </div>
+      </form>
+      <form>
+        <div class="input-group mb-3 input-group-sm">
+          <div class="input-group-prepend">
+            <span class="input-group-text">6.</span>
+          </div>
+          <input type="text" class="form-control" placeholder="Name" id="modiName6">
+          <input type="text" class="form-control" placeholder="Title" id="modiTit6">
+        </div>
+      </form>
+      <form>
+        <div class="input-group mb-3 input-group-sm">
+          <div class="input-group-prepend">
+            <span class="input-group-text">7.</span>
+          </div>
+          <input type="text" class="form-control" placeholder="Name" id="modiName7">
+          <input type="text" class="form-control" placeholder="Title" id="modiTit7">
+        </div>
+      </form>
+      <form>
+          <div class="input-group mb-3 input-group-sm">
+            <div class="input-group-prepend">
+              <span class="input-group-text">8.</span>
+            </div>
+            <input type="text" class="form-control" placeholder="Name" id="modiName8">
+          <input type="text" class="form-control" placeholder="Title" id="modiTit8">
+          </div>
+        </form>
+        <form>
+        <div class="input-group mb-3 input-group-sm">
+          <div class="input-group-prepend">
+            <span class="input-group-text">9.</span>
+          </div>
+          <input type="text" class="form-control" placeholder="Name" id="modiName9">
+          <input type="text" class="form-control" placeholder="Title" id="modiTit9">
+        </div>
+      </form>
+      <form>
+        <div class="input-group mb-3 input-group-sm">
+          <div class="input-group-prepend">
+            <span class="input-group-text">10.</span>
+          </div>
+          <input type="text" class="form-control" placeholder="Name" id="modiName10">
+          <input type="text" class="form-control" placeholder="Title" id="modiTit10">
+        </div>
+      </form>
+      <!--提交表单-->
+      <div>
+        <button onclick="updateList()" id="updateList" type="submit" class="btn btn-primary">Update</button>
+      </div>
+    </div>
+
+    <!-- QR Code JS-->
+    <script type="text/javascript">
+      var qrcode = new QRCode(document.getElementById("qrcode"), {
+        width : 100,
+        height : 100
+      });
+      function makeCode () {
+        var cirNum = document.getElementById("cirNum").value;
+        var cirNum = cirNum.toUpperCase();		
+        var elText = "https://doctracking-scanner.firebaseapp.com/?" + cirNum;
+        qrcode.makeCode(elText);
+      }
+      makeCode();
+      $("#cirNum").
+        on("blur", function () {
+          makeCode();
+        }).
+        on("keydown", function (e) {
+          if (e.keyCode == 13) {
+            makeCode();
+          }
+        });
+    </script>
+
+    <!-- Firebase preset script-->
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
+        // // The Firebase SDK is initialized and available here!
+        //
+        // firebase.auth().onAuthStateChanged(user => { });
+        // firebase.database().ref('/path/to/ref').on('value', snapshot => { });
+        // firebase.messaging().requestPermission().then(() => { });
+        // firebase.storage().ref('/path/to/ref').getDownloadURL().then(() => { });
+        //
+        // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
+
+        try {
+          let app = firebase.app();
+          let features = ['auth', 'database', 'messaging', 'storage'].filter(feature => typeof app[feature] === 'function');
+          document.getElementById('load').innerHTML = `Firebase SDK loaded with ${features.join(', ')}`;
+        } catch (e) {
+          console.error(e);
+          document.getElementById('load').innerHTML = 'Error loading the Firebase SDK, check the console.';
+        }
+      });
+    </script>
+    
+    <!-- Firebase SDK -->
+    <!-- Insert these scripts at the bottom of the HTML, but before you use any Firebase services -->
+    <!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/6.3.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/6.3.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/6.3.1/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/6.3.1/firebase-functions.js"></script>
+
+    <script>
+      // Your web app's Firebase configuration
+      var firebaseConfig = {
+        apiKey: "AIzaSyAKxdtI4NLc9qiWo6WEbES7_2Phnwn1RJo",
+        authDomain: "doctracking-7d732.firebaseapp.com",
+        databaseURL: "https://doctracking-7d732.firebaseio.com",
+        projectId: "doctracking-7d732",
+        storageBucket: "doctracking-7d732.appspot.com",
+        messagingSenderId: "365268426767",
+        appId: "1:365268426767:web:b12d81f6f997f71c"
+      };
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig);
+
+      // Get a reference to the database service
+      var database = firebase.database();
+    </script>
+    
+  </body>
+</html>

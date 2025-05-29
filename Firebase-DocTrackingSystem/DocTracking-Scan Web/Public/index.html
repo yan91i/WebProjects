@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Instascan Web</title>
+    <link rel="icon" type="image/png" href="favicon.png">
+    <link rel="stylesheet" href="style.css">
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/webrtc-adapter/3.3.3/adapter.min.js"></script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.1.10/vue.min.js"></script>
+    <script type="text/javascript" src="https://rawgit.com/schmich/instascan-builds/master/instascan.min.js"></script>
+
+    <!--Call Bootstrap-->
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+    
+    <script src="https://cdn.firebase.com/libs/firebaseui/4.1.0/firebaseui.js"></script>
+    <link type="text/css" rel="stylesheet" href="https://cdn.firebase.com/libs/firebaseui/4.1.0/firebaseui.css" />
+    
+    <script type="text/javascript" src='main.js'></script>
+    <script type="text/javascript" src="instascan.min.js"></script>
+  </head>
+  <body onload="init()">
+
+    <div class="container" id="task-div" style="display:block">
+      <div class="container">
+          <div class="row clearfix">
+            <div class="col-md-8 column">
+              <div id="sheetHead">
+                    <h5>Sheet Num</h5>
+                    <h5>Sheet Creator</h5>
+                    <h5>Sheet Project Info</h5>
+                    <h5>Sheet Document Name</h5>
+              </div>
+            </div>
+            <div class="col-md-4 column">
+              <div>
+                <button onclick="toRegister()" type="submit" class="btn btn-primary btn-sm btn-block">Register</button>
+              </div>
+              <br>
+              <div>
+                <button onclick="toSearch()" type="submit" class="btn btn-secondary btn-sm btn-block">Back to Search</button>
+                <br>
+              </div>
+            </div>
+            <br>
+            <table class="table table-bordered table-hover">
+              <thead>
+                <tr>
+                  <th>No.</th>
+                  <th>Name</th>
+                  <th>IN Record</th>
+                  <th>OUT Record</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>1</td>
+                  <td id="u1Name"></td>
+                  <td id="u1InRecord"></td>
+                  <td id="u1OutRecord"></td>
+                </tr>
+                <tr>
+                  <td>2</td>
+                  <td id="u2Name"></td>
+                  <td id="u2InRecord"></td>
+                  <td id="u2OutRecord"></td>
+                </tr>
+                <tr>
+                  <td>3</td>
+                  <td id="u3Name"></td>
+                  <td id="u3InRecord"></td>
+                  <td id="u3OutRecord"></td>
+                </tr>
+                <tr>
+                  <td>4</td>
+                  <td id="u4Name"></td>
+                  <td id="u4InRecord"></td>
+                  <td id="u4OutRecord"></td>
+                </tr>
+                <tr>
+                  <td>5</td>
+                  <td id="u5Name"></td>
+                  <td id="u5InRecord"></td>
+                  <td id="u5OutRecord"></td>
+                </tr>
+                <tr>
+                  <td>6</td>
+                  <td id="u6Name"></td>
+                  <td id="u6InRecord"></td>
+                  <td id="u6OutRecord"></td>
+                </tr>
+                <tr>
+                  <td>7</td>
+                  <td id="u7Name"></td>
+                  <td id="u7InRecord"></td>
+                  <td id="u7OutRecord"></td>
+                </tr>
+                <tr>
+                  <td>8</td>
+                  <td id="u8Name"></td>
+                  <td id="u8InRecord"></td>
+                  <td id="u8OutRecord"></td>
+                </tr>
+                <tr>
+                  <td>9</td>
+                  <td id="u9Name"></td>
+                  <td id="u9InRecord"></td>
+                  <td id="u9OutRecord"></td>
+                </tr>
+                <tr>
+                  <td>10</td>
+                  <td id="u10Name"></td>
+                  <td id="u10InRecord"></td>
+                  <td id="u10OutRecord"></td>
+                </tr>
+              </tbody>
+            </table>
+          </div> 
+      </div>
+    </div>
+
+    <div class="container" id="register-div" style="display:block">
+      <div class="container">
+        <div class="row clearfix">
+          <div class="col-md-12 column">
+            <form role="form">
+              <div class="form-group">
+                <label for="name">Select Your Name</label>
+                <select class="form-control" id="showName">
+                  <option>1</option>
+                </select>
+              </div>
+            </form>
+            <br>
+          </div>
+          <div class="col-md-12 column" id="inRegister">
+            <button onclick="updateIN()" type="button" class="btn btn-primary btn-sm btn-block">IN</button>
+
+            <button onclick="updateOUT()" type="button" class="btn btn-primary btn-sm btn-block">OUT</button>
+
+            <button onclick="updateOnLeave()" type="button" class="btn btn-primary btn-sm btn-block">ON LEAVE</button>
+          </div>
+          <div class="col-md-12 column">
+            <br>
+            <button onclick="toTask()" type="button" class="btn btn-secondary btn-sm btn-block">Back to Task</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+          // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
+          // // The Firebase SDK is initialized and available here!
+          //
+          // firebase.auth().onAuthStateChanged(user => { });
+          // firebase.database().ref('/path/to/ref').on('value', snapshot => { });
+          // firebase.messaging().requestPermission().then(() => { });
+          // firebase.storage().ref('/path/to/ref').getDownloadURL().then(() => { });
+          //
+          // // 🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥🔥
+  
+          try {
+            let app = firebase.app();
+            let features = ['auth', 'database', 'messaging', 'storage'].filter(feature => typeof app[feature] === 'function');
+            document.getElementById('load').innerHTML = `Firebase SDK loaded with ${features.join(', ')}`;
+          } catch (e) {
+            console.error(e);
+            document.getElementById('load').innerHTML = 'Error loading the Firebase SDK, check the console.';
+          }
+        });
+    </script>
+
+    <!-- Firebase SDK -->
+    <!-- Insert these scripts at the bottom of the HTML, but before you use any Firebase services -->
+    <!-- Firebase App (the core Firebase SDK) is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/6.3.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/6.3.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/6.3.1/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/6.3.1/firebase-functions.js"></script>
+
+    <script>
+      // Your web app's Firebase configuration
+      var firebaseConfig = {
+        apiKey: "AIzaSyAKxdtI4NLc9qiWo6WEbES7_2Phnwn1RJo",
+        authDomain: "doctracking-7d732.firebaseapp.com",
+        databaseURL: "https://doctracking-7d732.firebaseio.com",
+        projectId: "doctracking-7d732",
+        storageBucket: "doctracking-7d732.appspot.com",
+        messagingSenderId: "365268426767",
+        appId: "1:365268426767:web:b12d81f6f997f71c"
+      };
+      // Initialize Firebase
+      firebase.initializeApp(firebaseConfig);
+
+      // Get a reference to the database service
+      var database = firebase.database();
+    </script>
+  </body>
+</html>
